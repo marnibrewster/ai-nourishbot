@@ -1,6 +1,6 @@
-# AI NourishBot (aka AI Dietary Crew)
+# AI NourishBot
 
-![NourishBot demo](assets/ai-nourishbot.png)
+![NourishBot demo screnshot](assets/ai-nourishbot.png)
 
 AI-powered nutrition assistant built with CrewAI and Gradio. NourishBot uses multimodal input and multi-agent reasoning to analyze meals, provide nutritional insights, and suggest personalized recipes through an interactive web app. This project demonstrates the use of CrewAI and other AI tools to deliver insightful and personalized nutritional feedback.
 
