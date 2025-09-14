@@ -1,13 +1,9 @@
 # tools_multimodal_open_source.py
-import os
-import json
-import base64
-import requests
+import os, json, base64, requests
 from io import BytesIO
 from typing import List, Optional
 from langchain.tools import tool
-import logging
-
+import logging 
 logging.basicConfig(level=logging.INFO)
 logging.info("Extracting ingredients from image...")
 
@@ -44,7 +40,7 @@ def _chat(messages: list, model: str, max_tokens: int = 300) -> str:
     )
     r.raise_for_status()
     data = r.json()
-    return data["choices"][0]["message"]["content"].strip()
+    return data["choices"][0]["message"]["content"].strip() 
 
 # ---------- Tools ----------
 class ExtractIngredientsTool:
@@ -76,33 +72,3 @@ class FilterIngredientsTool:
         ingredients = [ing.strip().lower() for ing in raw_ingredients.split(",") if ing.strip()]
         return ingredients
 
-class NutrientAnalysisTool:
-    @tool("Analyze nutritional values and calories of the dish from uploaded image")
-    def analyze_image(image_input: str) -> str:
-        """
-        Provide a nutrient breakdown and total calories from the uploaded image.
-        :param image_input: Image file path (local) or URL (remote).
-        :return: Structured analysis string (identification, portions, totals, breakdown, evaluation, disclaimer).
-        """
-        img_data_url = _b64_from_input(image_input)
-        assistant_prompt = """
-You are an expert nutritionist. Analyze the food in the image and respond in this exact structure:
-
-1. **Identification**: One item per line.
-2. **Portion Size & Calorie Estimation**: Bullet each with: **[Food Item]**: [Portion], [Calories] calories
-3. **Total Calories**: [Number]
-4. **Nutrient Breakdown**: Key macros + notable micros per item and totals.
-5. **Health Evaluation**: One paragraph.
-6. **Disclaimer**:
-The nutritional information and calorie estimates provided are approximate and are based on general food data. 
-Actual values may vary depending on factors such as portion size, specific ingredients, preparation methods, and individual variations. 
-For precise dietary advice or medical guidance, consult a qualified nutritionist or healthcare provider.
-"""
-        messages = [{
-            "role": "user",
-            "content": [
-                {"type": "text", "text": assistant_prompt},
-                {"type": "image_url", "image_url": {"url": img_data_url}},
-            ],
-        }]
-        return _chat(messages, model=VISION_MODEL, max_tokens=700)

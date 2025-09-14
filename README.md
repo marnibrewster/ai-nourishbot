@@ -5,6 +5,7 @@
 AI-powered nutrition assistant built with CrewAI and Gradio. NourishBot uses multimodal input and multi-agent reasoning to analyze meals, provide nutritional insights, and suggest personalized recipes through an interactive web app. This project demonstrates the use of CrewAI and other AI tools to deliver insightful and personalized nutritional feedback.
 
 ⚠️ Note: This repo is inspired by an IBM Coursera lab but does not include any IBM lab credentials or proprietary course materials. All code here has been adapted and extended by me for personal learning and portfolio purposes.
+I attempted to port the Coursera IBM Watson tutorial to OpenAI/Ollama. I discovered that while CrewAI offers powerful abstractions, it introduces brittleness around JSON schema enforcement and tool calling. I adjusted by simplifying the workflow to highlight recipes, which demonstrates the orchestration concept while ensuring the app is reliable and user-friendly.
 
 ## Features
 
@@ -16,9 +17,6 @@ AI-powered nutrition assistant built with CrewAI and Gradio. NourishBot uses mul
 
 - **Calorie Estimation**  
   Estimates total calories from the detected ingredients.
-
-- **Nutrient Analysis**  
-  Provides a detailed breakdown of key nutrients such as protein, carbohydrates, fats, vitamins, and minerals.
 
 - **Health Evaluation**  
   Summarizes the overall healthiness of the meal and provides a health evaluation.
@@ -32,9 +30,6 @@ The project is built using the CrewAI framework, which organizes agents and task
 
 1. **Recipe Workflow**  
    Detects ingredients, filters them based on dietary restrictions, and suggests recipes.
-
-2. **Analysis Workflow**  
-   Directly estimates calories, performs nutrient analysis, and provides a health evaluation summary from a food image.
 
 ## Installation
 

@@ -27,18 +27,6 @@ dietary_filtering_agent:
     Once you have filtered the ingredients once, consider the task complete to avoid redundant actions.
     Respond with a single top-level JSON object only. No prose or markdown. (json)
 
-nutrient_analysis_agent:
-  llm: openai_vision
-  role: >
-    Nutrition Analysis Specialist
-  goal: >
-    Provide a detailed breakdown of key nutrients in the meal, such as protein, carbohydrates, fats, vitamins, and minerals; 
-    as well the caloric content of the food.
-  backstory: >
-    You specialize in nutrition analysis and have extensive knowledge of the nutritional composition of food.
-    Your job is to offer users a clear and detailed report on the nutrients present in their meals, helping them make informed dietary choices.
-    Respond with **JSON** only. No extra commentary or markdown.
-
 recipe_suggestion_agent:
   llm: openai_text
   role: >

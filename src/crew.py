@@ -2,11 +2,10 @@ import os
 import yaml
 from crewai import Agent, Crew, Process, Task, LLM
 from crewai.project import CrewBase, agent, crew, task, llm
-from src.models import NutrientAnalysisOutput, RecipeSuggestionOutput
+from src.models import RecipeSuggestionOutput
 from src.tools import (
     ExtractIngredientsTool, 
     FilterIngredientsTool,
-    NutrientAnalysisTool
 )
 
 # Get the absolute path to the config directory
@@ -30,7 +29,7 @@ class BaseNourishBotCrew:
     @llm
     def openai_text(self) -> LLM:
         return LLM(
-            model=os.getenv("OPENAI_TEXT_MODEL", "gpt-3.5-turbo"),
+            model=os.getenv("OPENAI_TEXT_MODEL", "gpt-4o-mini"),
             api_key=os.getenv("OPENAI_API_KEY"),
             base_url=os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1"),
             temperature=0.2,
@@ -69,16 +68,6 @@ class BaseNourishBotCrew:
         )
 
     @agent
-    def nutrient_analysis_agent(self) -> Agent:
-        return Agent(
-            config=self.agents_config['nutrient_analysis_agent'],
-            tools=[NutrientAnalysisTool.analyze_image],
-            allow_delegation=False,
-            max_iter=4,
-            verbose=True
-        )
-
-    @agent
     def recipe_suggestion_agent(self) -> Agent:
         return Agent(
             config=self.agents_config['recipe_suggestion_agent'],
@@ -113,17 +102,6 @@ class BaseNourishBotCrew:
         )
 
     @task
-    def nutrient_analysis_task(self) -> Task:
-        task_config = self.tasks_config['nutrient_analysis_task']
-
-        return Task(
-            description=task_config['description'],
-            agent=self.nutrient_analysis_agent(),
-            expected_output=task_config['expected_output'],
-            output_json=NutrientAnalysisOutput
-        )
-
-    @task
     def recipe_suggestion_task(self) -> Task:
         task_config = self.tasks_config['recipe_suggestion_task']
 
@@ -154,27 +132,6 @@ class NourishBotRecipeCrew(BaseNourishBotCrew):
             self.ingredient_detection_agent(),
             self.dietary_filtering_agent(),
             self.recipe_suggestion_agent()
-        ]
-
-        return Crew(
-            agents=agents,
-            tasks=tasks,
-            process=Process.sequential,
-            verbose=True
-        )
-
-
-@CrewBase
-class NourishBotAnalysisCrew(BaseNourishBotCrew):
-
-    @crew
-    def crew(self) -> Crew:
-        tasks = [
-            self.nutrient_analysis_task(),
-        ]
-
-        agents = [
-            self.nutrient_analysis_agent(),
         ]
 
         return Crew(
